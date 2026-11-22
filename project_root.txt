@@ -1,0 +1,15 @@
+/project_root/
+├── .agents/workflows/
+│   ├── main_graph.yaml
+│   └── node_rules.md
+├── scripts/
+│   ├── check_word_count.py
+│   ├── check_font_size.py
+│   ├── check_sources.py
+│   └── check_external_links.py
+├── sources.md          (已寫入：小水滴水循環原始教材 Data 1~8)
+├── cards/              (空目錄，待執行)
+├── outline.md          (空檔，待執行)
+├── drafts/             (空目錄，待執行)
+├── deck.html           (空檔，待執行)
+└── report.md           (空檔，待執行)

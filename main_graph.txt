@@ -1,0 +1,61 @@
+name: Presentation_Generation_Graph
+description: 嚴格 RAG 限制的簡報與報告生成產線
+max_global_loops: 3 # 整體停止條件：最多 3 輪
+
+nodes:
+  - id: card_generator
+    type: llm_agent
+    input: [sources.md]
+    output: [cards/]
+  
+  - id: outline_generator
+    type: llm_agent
+    input: [cards/]
+    output: [outline.md]
+
+  - id: drafter
+    type: llm_agent
+    input: [outline.md, cards/]
+    output: [drafts/]
+    max_retries: 2 # 節點內的小 loop 上限：最多 2 輪
+
+  - id: renderer
+    type: code_agent
+    input: [drafts/]
+    output: [deck.html, report.md]
+    max_retries: 3 # 節點內的小 loop 上限：截圖修版面最多 3 輪
+
+edges:
+  - from: start
+    to: card_generator
+  - from: card_generator
+    to: outline_generator
+  - from: outline_generator
+    to: drafter
+  
+  # 逐頁稿的檢查與退回機制 (精準退回)
+  - from: drafter
+    to: validate_drafts
+  - from: validate_drafts
+    condition: failed
+    target: drafter
+    action: target_retry # 只退回出錯的那一頁或那張卡
+  - from: validate_drafts
+    condition: passed
+    target: renderer
+
+  # 渲染的檢查與退回機制
+  - from: renderer
+    to: validate_render
+  - from: validate_render
+    condition: failed
+    target: renderer
+    action: visual_retry # 截圖 -> 修版面 -> 再截圖
+  - from: validate_render
+    condition: passed
+    target: end
+
+interrupts:
+  - condition: "data_insufficient" # 資料不足就停下來告訴人類
+    action: halt_and_notify_user
+    message: "資料卡不足以支撐大綱，請補充 sources，嚴禁自行發明內容。"
