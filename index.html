@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>小水滴的水循環</title>
     <style>
+        /* 基礎背景與字型設定 */
         body { 
             font-family: 'Comic Sans MS', 'Microsoft JhengHei', sans-serif; 
             background-color: #e0f7fa; 
@@ -12,6 +13,8 @@
             align-items: center; 
             padding: 20px;
         }
+        
+        /* 投影片卡片設計：加入進場動畫 */
         .slide { 
             background-color: #ffffff; 
             border: 4px solid #4dd0e1; 
@@ -19,15 +22,50 @@
             padding: 40px; 
             border-radius: 20px; 
             width: 90%; 
-            max-width: 800px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1); 
+            max-width: 900px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            opacity: 0; /* 動畫初始狀態 */
+            animation: slideIn 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
         }
+        
+        /* 為每張投影片設定不同的進場延遲時間，產生接力出現的效果 */
+        #page_01 { animation-delay: 0.2s; }
+        #page_02 { animation-delay: 0.4s; }
+        #page_03 { animation-delay: 0.6s; }
+        #page_04 { animation-delay: 0.8s; }
+        #page_05 { animation-delay: 1.0s; }
+
+        /* 圖文並排的 Flex 容器 */
+        .content-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .text-box {
+            flex: 2;
+        }
+        .image-box {
+            flex: 1;
+            background-color: #f1f8e9;
+            border: 3px dashed #8bc34a;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            font-size: 80px; /* 超大 Emoji 插圖 */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+            /* 加入上下漂浮的待機動畫 */
+            animation: float 3s ease-in-out infinite;
+        }
+
         h1 { 
             font-size: 48px; 
             color: #00838f; 
             text-align: center; 
             border-bottom: 3px dashed #b2ebf2;
             padding-bottom: 15px;
+            margin-top: 0;
         }
         p { 
             font-size: 32px; 
@@ -35,14 +73,35 @@
             color: #333333; 
         }
         .caption { 
-            font-size: 24px; /* 第 3 輪修正為 24px */
+            font-size: 24px; 
             color: #006064; 
             font-weight: bold; 
-            margin-top: 20px;
+            background-color: #e0f2f1;
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: inline-block;
         }
         .citation {
-            font-size: 24px; /* 第 3 輪修正為 24px */
+            font-size: 24px; 
             color: #9e9e9e;
+        }
+
+        /* 定義動畫腳本 (Keyframes) */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
     </style>
 </head>
@@ -51,36 +110,62 @@
     <!-- 第 1 頁：蒸發 -->
     <div class="slide" id="page_01">
         <h1>☀️ 1. 太陽公公的大烤箱</h1>
-        <p>小水滴在水坑覺得太熱，變成看不見的水蒸氣溜到天空，這叫「蒸發」！<span class="citation">[cite: 1]</span></p>
-        <p class="caption">📝 提示：找找看雨停後的操場！</p>
+        <div class="content-wrapper">
+            <div class="text-box">
+                <p>小水滴在水坑覺得太熱，變成看不見的水蒸氣溜到天空，這叫「蒸發」！<span class="citation">[cite: 1]</span></p>
+                <p class="caption">📝 提示：找找看雨停後的操場！</p>
+            </div>
+            <!-- 可替換為真實圖片： <img src="sun_puddle.jpg" width="100%" style="border-radius:20px;"> -->
+            <div class="image-box">☀️<br>🏃💧</div>
+        </div>
     </div>
 
     <!-- 第 2 頁：蒸散 -->
     <div class="slide" id="page_02">
         <h1>🌳 2. 森林植物在流汗</h1>
-        <p>森林裡的大樹也會流汗喔！水分從樹葉的小洞洞變成水蒸氣飛走，這叫做「蒸散作用」。<span class="citation">[cite: 1]</span></p>
-        <p class="caption">📝 提示：森林空氣涼涼的秘密！</p>
+        <div class="content-wrapper">
+            <div class="text-box">
+                <p>森林裡的大樹也會流汗喔！水分從樹葉的小洞洞變成水蒸氣飛走，這叫做「蒸散作用」。<span class="citation">[cite: 1]</span></p>
+                <p class="caption">📝 提示：森林空氣涼涼的秘密！</p>
+            </div>
+            <div class="image-box">🌲<br>💦🍃</div>
+        </div>
     </div>
 
-    <!-- 第 3 頁：凝結 (第 2 輪退回縮減字數後版本) -->
+    <!-- 第 3 頁：凝結 -->
     <div class="slide" id="page_03">
         <h1>☁️ 3. 高空冷氣房</h1>
-        <p>水蒸氣飛到高空覺得好冷，大家抱在一起變回小水滴或小冰晶，這就是「凝結」，也是雲的真面目！<span class="citation">[cite: 1]</span></p>
-        <p class="caption">📝 提示：天上白白胖胖的棉花糖！</p>
+        <div class="content-wrapper">
+            <div class="text-box">
+                <p>水蒸氣飛到高空覺得好冷，大家抱在一起變回小水滴或小冰晶，這就是「凝結」，也是雲的真面目！<span class="citation">[cite: 1]</span></p>
+                <p class="caption">📝 提示：天上白白胖胖的棉花糖！</p>
+            </div>
+            <div class="image-box">🥶<br>☁️🧊</div>
+        </div>
     </div>
 
     <!-- 第 4 頁：降水 -->
     <div class="slide" id="page_04">
         <h1>🌧️ 4. 瘋狂溜滑梯</h1>
-        <p>雲朵變太重，空氣托不住，小水滴就從天空掉下來，這叫做「降水」，像是下雨或下雪。<span class="citation">[cite: 1]</span></p>
-        <p class="caption">📝 提示：台灣常見的梅雨和颱風！</p>
+        <div class="content-wrapper">
+            <div class="text-box">
+                <p>雲朵變太重，空氣托不住，小水滴就從天空掉下來，這叫做「降水」，像是下雨或下雪。<span class="citation">[cite: 1]</span></p>
+                <p class="caption">📝 提示：台灣常見的梅雨和颱風！</p>
+            </div>
+            <div class="image-box">🌧️<br>🛝💧</div>
+        </div>
     </div>
 
-    <!-- 第 5 頁：逕流、地下水與循環 (第 2 輪補回引用標籤後版本) -->
+    <!-- 第 5 頁：循環 -->
     <div class="slide" id="page_05">
         <h1>🔄 5. 生生不息的旅行</h1>
-        <p>掉到地面的水在地上流叫「地表逕流」，鑽進土裡叫「地下水」。最後流回大海，這就是永遠不停的「水循環」！<span class="citation">[cite: 1]</span></p>
-        <p class="caption">📝 提示：你喝的水可能恐龍也喝過！</p>
+        <div class="content-wrapper">
+            <div class="text-box">
+                <p>掉到地面的水在地上流叫「地表逕流」，鑽進土裡叫「地下水」。最後流回大海，這就是永遠不停的「水循環」！<span class="citation">[cite: 1]</span></p>
+                <p class="caption">📝 提示：你喝的水可能恐龍也喝過！</p>
+            </div>
+            <div class="image-box">🌊<br>🔄🦖</div>
+        </div>
     </div>
 
 </body>
